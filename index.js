@@ -4,10 +4,9 @@ jQuery(async function() {
     const chatNode = document.getElementById("chat");
 
     const chatObserver = new MutationObserver(function() {
-        const messages = chatNode.querySelectorAll("div.mes[is_user=false]");
+        const avatarImages = chatNode.querySelectorAll("div.mes[is_user=false] div.avatar>img[src*=\"file=\"]");
 
-        for (const message of messages) {
-            const avatarImage = message.querySelector("div.avatar>img");
+        for (const avatarImage of avatarImages) {
             const internalCharName = avatarImage.src.match(/file=.*?\.png/)[0].slice("file=".length);
             avatarImage.src = `/characters/${internalCharName}`;
         }
@@ -16,10 +15,10 @@ jQuery(async function() {
     chatObserver.observe(chatNode, { childList: true });
 
     const zoomedAvatarObserver = new MutationObserver(function() {
-        const zoomedAvatarNode = document.querySelector("img.zoomed_avatar_img[src$=\".png\"]");
+        const zoomedAvatar = document.querySelector("img.zoomed_avatar_img[src$=\".png\"][src*=\"characters/\"]");
 
-        if (zoomedAvatarNode !== null) {
-            zoomedAvatarNode.src = `/characters/${(x => x[x.length - 1])(zoomedAvatarNode.src.split("/"))}`;
+        if (zoomedAvatar !== null) {
+            zoomedAvatar.src = `/characters/${(x => x[x.length - 1])(zoomedAvatar.src.split("/"))}`;
         }
     });
 
